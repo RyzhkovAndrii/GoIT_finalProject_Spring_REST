@@ -13,6 +13,7 @@ public abstract class NamedEntityServiceImpl<T extends NamedEntity, ID extends S
 
     public NamedEntityServiceImpl(NamedEntityRepository<T, ID> repository) {
         super(repository);
+        this.repository = repository;
     }
 
     @Override

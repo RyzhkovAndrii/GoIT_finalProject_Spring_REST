@@ -20,7 +20,7 @@ import java.util.Set;
 @ToString
 public class EventType extends NamedEntity {
 
-    @Column(name = "hourly_rate_coefficient")
+    @Column(name = "hourly_rate_coefficient", nullable = false)
     private long hourlyRateCoefficient;
 
     @OneToMany(mappedBy = "type")

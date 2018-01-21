@@ -43,7 +43,6 @@ public class User extends BaseEntity { // todo named entity ???
     @Column(name = "registration_date")
     private Date registrationDate;
 
-
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

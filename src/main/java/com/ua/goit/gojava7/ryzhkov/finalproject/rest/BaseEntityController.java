@@ -38,11 +38,19 @@ public abstract class BaseEntityController<T extends BaseEntity, ID extends Seri
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<T> save(@RequestBody T entity) {
-        return new ResponseEntity<>(baseEntityService.save(entity), HttpStatus.CREATED);
+    public ResponseEntity<T> save(@RequestBody T t) {
+        return new ResponseEntity<>(baseEntityService.save(t), HttpStatus.CREATED);
     }
 
-    // todo put method
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<T> update(@PathVariable("id") ID id, @RequestBody T entity) {
+        T oldEntity = baseEntityService.findById(id);
+        if (oldEntity == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        entity.setId(oldEntity.getId());
+        return new ResponseEntity<>(baseEntityService.save(entity), HttpStatus.CREATED);
+    }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> delete(@PathVariable("id") ID id) {

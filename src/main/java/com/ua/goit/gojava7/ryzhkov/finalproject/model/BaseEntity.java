@@ -1,5 +1,6 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @Data
 @MappedSuperclass
+@JsonIgnoreProperties(value = "id", allowGetters = true)
 public abstract class BaseEntity {
 
     @Id

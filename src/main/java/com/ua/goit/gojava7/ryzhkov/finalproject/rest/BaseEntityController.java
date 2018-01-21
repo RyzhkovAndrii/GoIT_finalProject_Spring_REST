@@ -54,6 +54,9 @@ public abstract class BaseEntityController<T extends BaseEntity, ID extends Seri
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> delete(@PathVariable("id") ID id) {
+        if (baseEntityService.findById(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         baseEntityService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

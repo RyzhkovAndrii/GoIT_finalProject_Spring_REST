@@ -21,7 +21,7 @@ import java.util.Set;
 public class EventType extends NamedEntity {
 
     @Column(name = "hourly_rate_coefficient", nullable = false)
-    private long hourlyRateCoefficient;
+    private double hourlyRateCoefficient;
 
     @OneToMany(mappedBy = "type")
     @JsonIgnore

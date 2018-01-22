@@ -1,8 +1,6 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,8 +14,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
-@JsonSerialize
-@JsonDeserialize
 @RequiredArgsConstructor
 @Setter
 @ToString

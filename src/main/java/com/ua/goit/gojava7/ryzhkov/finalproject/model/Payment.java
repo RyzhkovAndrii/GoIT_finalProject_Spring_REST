@@ -22,10 +22,10 @@ public class Payment extends BaseEntity {
     private Date date;
 
     @Column(name = "working_hours")
-    private float workingHours;
+    private double workingHours;
 
     @Column(name = "salary")
-    private float salary;
+    private double salary;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")

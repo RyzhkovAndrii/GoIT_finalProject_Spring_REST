@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -26,4 +27,9 @@ public class UserServiceImpl extends BaseEntityServiceImpl<User, UUID> implement
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public User save(User user) {
+        user.setRegistrationDate(new Date());
+        return super.save(user);
+    }
 }

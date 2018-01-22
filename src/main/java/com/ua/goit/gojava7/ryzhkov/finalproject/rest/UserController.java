@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.UUID;
 
 @RestController
@@ -28,7 +27,6 @@ public class UserController extends BaseEntityController<User, UUID> {
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> save(@RequestBody User user) {
-        user.setRegistrationDate(new Date());
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 

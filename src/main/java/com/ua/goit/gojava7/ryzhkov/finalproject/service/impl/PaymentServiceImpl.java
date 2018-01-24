@@ -51,6 +51,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Collection<Payment> getByEmployeeAndPeriod(Employee employee, Date startDate, Date finishDate) {
+        // todo dates check
         return paymentRepository.getByEmployeeAndDateIsBetween(employee, startDate, finishDate);
     }
 

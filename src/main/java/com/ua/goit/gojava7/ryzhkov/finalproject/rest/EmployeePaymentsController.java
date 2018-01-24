@@ -33,14 +33,7 @@ public class EmployeePaymentsController {
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Collection<Payment>> getEmployeePayments(@PathVariable("employee") UUID id) {
-        Employee employee = employeeService.findById(id);
-        if (employee == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        Collection<Payment> employeePayments = employee.getPayments();
-        return employeePayments.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(employeePayments, HttpStatus.OK); // todo optimized
+        return new ResponseEntity<>(employeeService.findById(id).getPayments(), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -49,17 +42,9 @@ public class EmployeePaymentsController {
             @PathVariable("employee") UUID id,
             @RequestParam("start-date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
             @RequestParam("finish-date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date finishDate) {
-        if (startDate.after(finishDate)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         Employee employee = employeeService.findById(id);
-        if (employee == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         Collection<Payment> employeePayments = paymentService.getByEmployeeAndPeriod(employee, startDate, finishDate);
-        return employeePayments.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(employeePayments, HttpStatus.OK); // todo optimized
+        return new ResponseEntity<>(employeePayments, HttpStatus.OK);
     }
 
 }

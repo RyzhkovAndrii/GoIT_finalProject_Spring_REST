@@ -28,36 +28,25 @@ public class UserController {
     @ApiOperation(value = "view list of users", response = Collection.class)
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Collection<User>> getList() {
-        Collection<User> list = userService.findAll();
-        return !list.isEmpty()
-                ? new ResponseEntity<>(list, HttpStatus.OK)
-                : new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "search user with ID", response = User.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> get(@PathVariable UUID id) {
-        User user = userService.findById(id);
-        return user != null
-                ? new ResponseEntity<>(user, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "add user", response = User.class)
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> save(@RequestBody User user) {
-        userService.save(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "update user")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> update(@PathVariable UUID id, @RequestBody User user) {
-        User entity = userService.findById(id);
-        if (entity == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        user.setId(entity.getId());
+        user.setId(id);
         userService.save(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -65,9 +54,6 @@ public class UserController {
     @ApiOperation(value = "delete user")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        if (userService.findById(id) == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

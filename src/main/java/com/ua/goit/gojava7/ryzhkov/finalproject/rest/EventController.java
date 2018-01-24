@@ -28,36 +28,25 @@ public class EventController {
     @ApiOperation(value = "view list of events", response = Collection.class)
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Collection<Event>> getList() {
-        Collection<Event> list = eventService.findAll();
-        return !list.isEmpty()
-                ? new ResponseEntity<>(list, HttpStatus.OK)
-                : new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(eventService.findAll(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "search event with ID", response = Event.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Event> get(@PathVariable UUID id) {
-        Event event = eventService.findById(id);
-        return event != null
-                ? new ResponseEntity<>(event, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(eventService.findById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "add event", response = Event.class)
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Event> save(@RequestBody Event event) {
-        eventService.save(event);
-        return new ResponseEntity<>(event, HttpStatus.CREATED);
+        return new ResponseEntity<>(eventService.save(event), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "update event")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> update(@PathVariable UUID id, @RequestBody Event event) {
-        Event entity = eventService.findById(id);
-        if (entity == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        event.setId(entity.getId());
+        event.setId(id);
         eventService.save(event);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -65,9 +54,6 @@ public class EventController {
     @ApiOperation(value = "delete event")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        if (eventService.findById(id) == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         eventService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

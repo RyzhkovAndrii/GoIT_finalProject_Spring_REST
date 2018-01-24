@@ -1,8 +1,6 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Employee;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.Event;
-import com.ua.goit.gojava7.ryzhkov.finalproject.service.EmployeeService;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,51 +22,27 @@ public class EventEmployeesController {
 
     private final EventService eventService;
 
-    private final EmployeeService employeeService;
-
     @Autowired
-    public EventEmployeesController(EventService eventService, EmployeeService employeeService) {
+    public EventEmployeesController(EventService eventService) {
         this.eventService = eventService;
-        this.employeeService = employeeService;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Collection<Employee>> getEventEmployees(@PathVariable("event") UUID id) {
-        Event event = eventService.findById(id);
-        if (event == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        Collection<Employee> eventEmployees = event.getEmployees();
-        return eventEmployees.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(eventEmployees, HttpStatus.OK); // todo optimized
+        return new ResponseEntity<>(eventService.findById(id).getEmployees(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{employee}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> addEventEmployee(@PathVariable("event") UUID eventId,
-                                                     @PathVariable("employee") UUID employeeId) {
-        Event event = eventService.findById(eventId);
-        Employee employee = employeeService.findById(employeeId);
-        if (event == null || employee == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        Collection<Employee> eventEmployees = event.getEmployees();
-        if (eventEmployees.contains(employee)) {
-            return new ResponseEntity<>(HttpStatus.OK); // todo another message
-        }
-        eventService.addEmployeeToEvent(event, employee);
+                                                 @PathVariable("employee") UUID employeeId) {
+        eventService.addEmployeeToEvent(eventId, employeeId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{employee}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> deleteEventEmployee(@PathVariable("event") UUID eventId,
                                                     @PathVariable("employee") UUID employeeId) {
-        Event event = eventService.findById(eventId);
-        Employee employee = employeeService.findById(employeeId);
-        if (event == null || employee == null || !event.getEmployees().contains(employee)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        eventService.deleteEmployeeFromEvent(event, employee);
+        eventService.deleteEmployeeFromEvent(eventId, employeeId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

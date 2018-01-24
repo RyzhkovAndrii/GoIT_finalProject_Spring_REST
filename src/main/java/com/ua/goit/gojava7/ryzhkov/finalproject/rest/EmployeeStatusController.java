@@ -28,45 +28,32 @@ public class EmployeeStatusController {
     @ApiOperation(value = "view list of employee statuses", response = Collection.class)
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Collection<EmployeeStatus>> getList() {
-        Collection<EmployeeStatus> list = employeeStatusService.findAll();
-        return !list.isEmpty()
-                ? new ResponseEntity<>(list, HttpStatus.OK)
-                : new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(employeeStatusService.findAll(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "search employee status with name", response = EmployeeStatus.class) // todo same ulr like list
+    @ApiOperation(value = "search employee status with name", response = EmployeeStatus.class)
+    // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<EmployeeStatus> getByName(@RequestParam String name) {
-        EmployeeStatus employeeStatus = employeeStatusService.findByName(name);
-        return employeeStatus != null
-                ? new ResponseEntity<>(employeeStatus, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(employeeStatusService.findByName(name), HttpStatus.OK);
     }
 
     @ApiOperation(value = "search employee status with ID", response = EmployeeStatus.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<EmployeeStatus> get(@PathVariable UUID id) {
-        EmployeeStatus employeeStatus = employeeStatusService.findById(id);
-        return employeeStatus != null
-                ? new ResponseEntity<>(employeeStatus, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(employeeStatusService.findById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "add employee status", response = EmployeeStatus.class)
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<EmployeeStatus> save(@RequestBody EmployeeStatus employeeStatus) {
-        employeeStatusService.save(employeeStatus);
-        return new ResponseEntity<>(employeeStatus, HttpStatus.CREATED);
+        return new ResponseEntity<>(employeeStatusService.save(employeeStatus), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "update employee status")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> update(@PathVariable UUID id, @RequestBody EmployeeStatus employeeStatus) {
-        EmployeeStatus entity = employeeStatusService.findById(id);
-        if (entity == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        employeeStatus.setId(entity.getId());
+        employeeStatus.setId(id);
         employeeStatusService.save(employeeStatus);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -74,11 +61,8 @@ public class EmployeeStatusController {
     @ApiOperation(value = "delete employee status")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        if (employeeStatusService.findById(id) == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         employeeStatusService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
+
 }

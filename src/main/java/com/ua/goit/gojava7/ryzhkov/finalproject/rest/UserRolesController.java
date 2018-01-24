@@ -1,8 +1,6 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Role;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.User;
-import com.ua.goit.gojava7.ryzhkov.finalproject.service.RoleService;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,51 +22,27 @@ public class UserRolesController {
 
     private final UserService userService;
 
-    private final RoleService roleService;
-
     @Autowired
-    public UserRolesController(UserService userService, RoleService roleService) {
+    public UserRolesController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Collection<Role>> getUserRoles(@PathVariable("user") UUID id) {
-        User user = userService.findById(id);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        Collection<Role> userRoles = user.getRoles();
-        return userRoles.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(userRoles, HttpStatus.OK); // todo optimized
+        return new ResponseEntity<>(userService.findById(id).getRoles(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{role}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> addUserRole(@PathVariable("user") UUID userId,
                                             @PathVariable("role") UUID roleId) {
-        User user = userService.findById(userId);
-        Role role = roleService.findById(roleId);
-        if (user == null || role == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        Collection<Role> userRoles = user.getRoles();
-        if (userRoles.contains(role)) {
-            return new ResponseEntity<>(HttpStatus.OK); // todo another message
-        }
-        userService.addRoleToUser(user, role);
+        userService.addRoleToUser(userId, roleId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/{role}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> deleteUserRole(@PathVariable("user") UUID userId,
                                                @PathVariable("role") UUID roleId) {
-        User user = userService.findById(userId);
-        Role role = roleService.findById(roleId);
-        if (user == null || role == null || !user.getRoles().contains(role)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        userService.deleteRoleFromUser(user, role);
+        userService.deleteRoleFromUser(userId, roleId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

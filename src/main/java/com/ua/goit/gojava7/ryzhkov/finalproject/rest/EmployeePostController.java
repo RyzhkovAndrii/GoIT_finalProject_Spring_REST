@@ -28,45 +28,31 @@ public class EmployeePostController {
     @ApiOperation(value = "view list of employee posts", response = Collection.class)
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Collection<EmployeePost>> getList() {
-        Collection<EmployeePost> list = employeePostService.findAll();
-        return !list.isEmpty()
-                ? new ResponseEntity<>(list, HttpStatus.OK)
-                : new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(employeePostService.findAll(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "search employee post with name", response = EmployeePost.class) // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<EmployeePost> getByName(@RequestParam String name) {
-        EmployeePost employeePost = employeePostService.findByName(name);
-        return employeePost != null
-                ? new ResponseEntity<>(employeePost, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(employeePostService.findByName(name), HttpStatus.OK);
     }
 
     @ApiOperation(value = "search employee post with ID", response = EmployeePost.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<EmployeePost> get(@PathVariable UUID id) {
-        EmployeePost employeePost = employeePostService.findById(id);
-        return employeePost != null
-                ? new ResponseEntity<>(employeePost, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(employeePostService.findById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "add employee post", response = EmployeePost.class)
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<EmployeePost> save(@RequestBody EmployeePost employeePost) {
-        employeePostService.save(employeePost);
-        return new ResponseEntity<>(employeePost, HttpStatus.CREATED);
+        return new ResponseEntity<>(employeePostService.save(employeePost), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "update employee post")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> update(@PathVariable UUID id, @RequestBody EmployeePost employeePost) {
-        EmployeePost entity = employeePostService.findById(id);
-        if (entity == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        employeePost.setId(entity.getId());
+        employeePost.setId(id);
         employeePostService.save(employeePost);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -74,9 +60,6 @@ public class EmployeePostController {
     @ApiOperation(value = "delete employee post")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        if (employeePostService.findById(id) == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
         employeePostService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

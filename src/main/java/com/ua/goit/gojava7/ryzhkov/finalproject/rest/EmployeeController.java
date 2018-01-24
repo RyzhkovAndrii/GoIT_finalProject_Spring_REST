@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/employees")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
 public class EmployeeController {
 
     private EmployeeService employeeService;
@@ -32,6 +34,7 @@ public class EmployeeController {
                 : new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_USER')") // todo only one user
     @ApiOperation(value = "search employee with ID", response = Employee.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Employee> get(@PathVariable UUID id) {

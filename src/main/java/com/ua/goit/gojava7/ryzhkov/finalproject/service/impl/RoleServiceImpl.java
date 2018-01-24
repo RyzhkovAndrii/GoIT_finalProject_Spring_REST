@@ -7,15 +7,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class RoleServiceImpl extends NamedEntityServiceImpl<Role, UUID> implements RoleService {
+public class RoleServiceImpl implements RoleService {
+
+    private RoleRepository roleRepository;
 
     @Autowired
     public RoleServiceImpl(RoleRepository roleRepository) {
-        super(roleRepository);
+        this.roleRepository = roleRepository;
+    }
+
+    @Override
+    public Role findById(UUID id) {
+        return roleRepository.findOne(id);
+    }
+
+    @Override
+    public Collection<Role> findAll() {
+        return roleRepository.findAll();
+    }
+
+    @Override
+    public Role save(Role role) {
+        return roleRepository.save(role);
+    }
+
+    @Override
+    public void delete(Role role) {
+        roleRepository.delete(role);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        roleRepository.delete(id);
+    }
+
+    @Override
+    public Role findByName(String name) {
+        return roleRepository.findByName(name);
     }
 
 }

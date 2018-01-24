@@ -7,19 +7,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class UserServiceImpl extends BaseEntityServiceImpl<User, UUID> implements UserService {
+public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
-        super(userRepository);
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public User findById(UUID id) {
+        return userRepository.findOne(id);
+    }
+
+    @Override
+    public Collection<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User save(User user) {
+        user.setRegistrationDate(new Date());
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        userRepository.delete(id);
     }
 
     @Override
@@ -27,9 +53,5 @@ public class UserServiceImpl extends BaseEntityServiceImpl<User, UUID> implement
         return userRepository.findByUsername(username);
     }
 
-    @Override
-    public User save(User user) {
-        user.setRegistrationDate(new Date());
-        return super.save(user);
-    }
+
 }

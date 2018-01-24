@@ -14,20 +14,39 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class PaymentServiceImpl extends BaseEntityServiceImpl<Payment, UUID> implements PaymentService {
+public class PaymentServiceImpl implements PaymentService {
 
     private PaymentRepository paymentRepository;
 
     @Autowired
     public PaymentServiceImpl(PaymentRepository paymentRepository) {
-        super(paymentRepository);
         this.paymentRepository = paymentRepository;
+    }
+
+    @Override
+    public Payment findById(UUID id) {
+        return paymentRepository.findOne(id);
+    }
+
+    @Override
+    public Collection<Payment> findAll() {
+        return paymentRepository.findAll();
     }
 
     @Override
     public Payment save(Payment payment) {
         payment.setDate(new Date());
-        return super.save(payment);
+        return paymentRepository.save(payment);
+    }
+
+    @Override
+    public void delete(Payment payment) {
+        paymentRepository.delete(payment);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        paymentRepository.delete(id);
     }
 
     @Override

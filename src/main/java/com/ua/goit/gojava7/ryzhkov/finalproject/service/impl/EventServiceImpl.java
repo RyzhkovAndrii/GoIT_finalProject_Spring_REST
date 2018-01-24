@@ -2,6 +2,7 @@ package com.ua.goit.gojava7.ryzhkov.finalproject.service.impl;
 
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Employee;
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Event;
+import com.ua.goit.gojava7.ryzhkov.finalproject.repository.EmployeeRepository;
 import com.ua.goit.gojava7.ryzhkov.finalproject.repository.EventRepository;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,12 @@ public class EventServiceImpl implements EventService {
 
     private EventRepository eventRepository;
 
+    private EmployeeRepository employeeRepository;
+
     @Autowired
-    public EventServiceImpl(EventRepository eventRepository) {
+    public EventServiceImpl(EventRepository eventRepository, EmployeeRepository employeeRepository) {
         this.eventRepository = eventRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -50,7 +54,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void addEmployeeToEvent(Event event, Employee employee) {
+    public void addEmployeeToEvent(UUID eventId, UUID employeeId) {
+        Event event = eventRepository.findOne(eventId);
+        Employee employee = employeeRepository.findOne(employeeId);
         Set<Employee> newEventEmployees = new HashSet<>();
         newEventEmployees.addAll(event.getEmployees());
         newEventEmployees.add(employee);
@@ -59,10 +65,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void deleteEmployeeFromEvent(Event event, Employee employee) {
+    public void deleteEmployeeFromEvent(UUID eventId, UUID employeeId) {
+        Event event = eventRepository.findOne(eventId);
+        Collection<Employee> eventEmployees = event.getEmployees();
         Set<Employee> newEventEmployees = new HashSet<>();
-        newEventEmployees.addAll(event.getEmployees());
-        newEventEmployees.remove(employee); // todo optimized
+        newEventEmployees.addAll(eventEmployees);
+        newEventEmployees.removeIf(role -> role.getId().equals(employeeId));
         event.setEmployees(newEventEmployees);
         eventRepository.save(event);
     }

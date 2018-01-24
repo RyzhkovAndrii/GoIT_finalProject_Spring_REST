@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -47,7 +45,7 @@ public class EventEmployeesController {
     }
 
     @RequestMapping(value = "/{employee}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Employee> addEventEmployee(@PathVariable("event") UUID eventId,
+    public ResponseEntity<Void> addEventEmployee(@PathVariable("event") UUID eventId,
                                                      @PathVariable("employee") UUID employeeId) {
         Event event = eventService.findById(eventId);
         Employee employee = employeeService.findById(employeeId);
@@ -58,11 +56,7 @@ public class EventEmployeesController {
         if (eventEmployees.contains(employee)) {
             return new ResponseEntity<>(HttpStatus.OK); // todo another message
         }
-        Set<Employee> newEventEmployees = new HashSet<>();
-        newEventEmployees.addAll(eventEmployees);
-        newEventEmployees.add(employee); // todo optimized
-        event.setEmployees(newEventEmployees);
-        eventService.save(event);
+        eventService.addEmployeeToEvent(event, employee);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -74,12 +68,7 @@ public class EventEmployeesController {
         if (event == null || employee == null || !event.getEmployees().contains(employee)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        Collection<Employee> eventEmployees = event.getEmployees();
-        Set<Employee> newEventEmployees = new HashSet<>();
-        newEventEmployees.addAll(eventEmployees);
-        newEventEmployees.remove(employee); // todo optimized
-        event.setEmployees(newEventEmployees);
-        eventService.save(event);
+        eventService.deleteEmployeeFromEvent(event, employee);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

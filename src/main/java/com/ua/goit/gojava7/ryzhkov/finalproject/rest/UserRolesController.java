@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -47,7 +45,7 @@ public class UserRolesController {
     }
 
     @RequestMapping(value = "/{role}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Role> addUserRole(@PathVariable("user") UUID userId,
+    public ResponseEntity<Void> addUserRole(@PathVariable("user") UUID userId,
                                             @PathVariable("role") UUID roleId) {
         User user = userService.findById(userId);
         Role role = roleService.findById(roleId);
@@ -58,11 +56,7 @@ public class UserRolesController {
         if (userRoles.contains(role)) {
             return new ResponseEntity<>(HttpStatus.OK); // todo another message
         }
-        Set<Role> newUserRoles = new HashSet<>();
-        newUserRoles.addAll(userRoles);
-        newUserRoles.add(role); // todo optimized
-        user.setRoles(newUserRoles);
-        userService.save(user);
+        userService.addRoleToUser(user, role);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -74,12 +68,7 @@ public class UserRolesController {
         if (user == null || role == null || !user.getRoles().contains(role)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        Collection<Role> userRoles = user.getRoles();
-        Set<Role> newUserRoles = new HashSet<>();
-        newUserRoles.addAll(userRoles);
-        newUserRoles.remove(role); // todo optimized
-        user.setRoles(newUserRoles);
-        userService.save(user);
+        userService.deleteRoleFromUser(user, role);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

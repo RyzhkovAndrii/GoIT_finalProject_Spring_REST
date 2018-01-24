@@ -2,6 +2,7 @@ package com.ua.goit.gojava7.ryzhkov.finalproject.service.impl;
 
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Role;
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.User;
+import com.ua.goit.gojava7.ryzhkov.finalproject.repository.RoleRepository;
 import com.ua.goit.gojava7.ryzhkov.finalproject.repository.UserRepository;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,12 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
+    private RoleRepository roleRepository;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -53,23 +57,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addRoleToUser(User user, Role role) {
+    public void addRoleToUser(UUID userId, UUID roleId) {
+        User user = userRepository.findOne(userId);
+        Role role = roleRepository.findOne(roleId);
         Set<Role> newUserRoles = new HashSet<>();
         newUserRoles.addAll(user.getRoles());
-        newUserRoles.add(role); // todo optimized
+        newUserRoles.add(role);
         user.setRoles(newUserRoles);
         userRepository.save(user);
     }
 
     @Override
-    public void deleteRoleFromUser(User user, Role role) {
+    public void deleteRoleFromUser(UUID userId, UUID roleId) {
+        User user = userRepository.findOne(userId);
         Collection<Role> userRoles = user.getRoles();
         Set<Role> newUserRoles = new HashSet<>();
         newUserRoles.addAll(userRoles);
-        newUserRoles.remove(role); // todo optimized
+        newUserRoles.removeIf(role -> role.getId().equals(roleId));
         user.setRoles(newUserRoles);
         userRepository.save(user);
     }
-
 
 }

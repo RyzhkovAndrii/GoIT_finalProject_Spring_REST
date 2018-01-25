@@ -70,7 +70,7 @@ public class Employee extends BaseEntity {
     private User user;
 
     @Column(name = "current_working_hours", nullable = false)
-    @ApiModelProperty( position = 9, readOnly = true)
+    @ApiModelProperty(position = 9, readOnly = true)
     private double currentWorkingHours;
 
 }

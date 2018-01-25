@@ -29,6 +29,7 @@ public class CustomEmployeeSerializer extends JsonSerializer<Employee> {
         } else {
             jsonGenerator.writeNullField("user");
         }
+        jsonGenerator.writeNumberField("current-working-hours", employee.getCurrentWorkingHours());
         jsonGenerator.writeEndObject();
     }
 

@@ -6,6 +6,8 @@ import java.util.UUID;
 
 public interface EventService extends BaseEntityService<Event, UUID> {
 
+    void update(Event event);
+
     void addEmployeeToEvent(UUID eventId, UUID employeeId);
 
     void deleteEmployeeFromEvent(UUID eventId, UUID employeeId);

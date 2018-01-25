@@ -5,9 +5,8 @@ import com.ua.goit.gojava7.ryzhkov.finalproject.model.Payment;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.UUID;
 
-public interface PaymentService extends BaseEntityService<Payment, UUID> {
+public interface PaymentService {
 
     Collection<Payment> getByEmployeeAndPeriod(Employee employee, Date startDate, Date finishDate);
 

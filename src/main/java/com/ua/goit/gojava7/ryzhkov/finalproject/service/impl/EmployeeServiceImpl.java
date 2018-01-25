@@ -46,4 +46,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.delete(id);
     }
 
+    @Override
+    public void changeCurrentWorkingHours(Employee employee, double time) {
+        double currentWorkingHours = employee.getCurrentWorkingHours();
+        currentWorkingHours += time;
+        employee.setCurrentWorkingHours(currentWorkingHours);
+        save(employee);
+    }
+
+    @Override
+    public void nullableCurrentWorkingHours(Employee employee) {
+        employee.setCurrentWorkingHours(0);
+        save(employee);
+    }
+
 }

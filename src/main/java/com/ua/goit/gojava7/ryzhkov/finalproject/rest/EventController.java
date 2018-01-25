@@ -47,7 +47,7 @@ public class EventController {
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Void> update(@PathVariable UUID id, @RequestBody Event event) {
         event.setId(id);
-        eventService.save(event);
+        eventService.update(event);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

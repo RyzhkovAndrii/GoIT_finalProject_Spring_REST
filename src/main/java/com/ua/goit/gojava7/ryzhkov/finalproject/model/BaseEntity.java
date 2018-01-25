@@ -1,6 +1,7 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -13,7 +14,6 @@ import java.util.UUID;
 
 @Data
 @MappedSuperclass
-@JsonIgnoreProperties(value = "id", allowGetters = true)
 public abstract class BaseEntity {
 
     @Id
@@ -21,6 +21,8 @@ public abstract class BaseEntity {
     @GeneratedValue(generator = "uuid-gen")
     @Type(type = "org.hibernate.type.UUIDBinaryType")
     @Column(name = "id")
+    @ApiModelProperty(readOnly = true, position = -2)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UUID id;
 
 }

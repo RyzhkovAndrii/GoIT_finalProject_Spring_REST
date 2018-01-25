@@ -19,7 +19,7 @@ public abstract class BaseEntity {
     @Id
     @GenericGenerator(name = "uuid-gen", strategy = "org.hibernate.id.UUIDGenerator")
     @GeneratedValue(generator = "uuid-gen")
-    @Type(type = "org.hibernate.type.UUIDBinaryType")
+    @Type(type = "org.hibernate.type.PostgresUUIDType")
     @Column(name = "id")
     @ApiModelProperty(readOnly = true, position = -2)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

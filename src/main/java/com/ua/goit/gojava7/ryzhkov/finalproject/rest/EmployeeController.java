@@ -31,7 +31,8 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.findAll(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_USER')") // todo only one user
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE USER')")
+//            "or #id == @securityServiceImpl.findLoggedInEmployeeId()") // todo not working
     @ApiOperation(value = "search employee with ID", response = Employee.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Employee> get(@PathVariable UUID id) {

@@ -40,7 +40,7 @@ public class User extends BaseEntity {
     @ApiModelProperty(hidden = true)
     private String confirmPassword; // todo confirm password
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @ApiModelProperty(readOnly = true, position = 3)
     @Column(name = "registration_date", nullable = false)
     private Date registrationDate;

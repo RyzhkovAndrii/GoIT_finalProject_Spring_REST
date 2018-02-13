@@ -1,0 +1,254 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="uuid.type" value="uuid" dbms="postgresql"/>
+    <property name="uuid.type" value="varbinary(max)" dbms="h2"/>
+
+    <changeSet id="1" author="andrii.ryzhkov">
+        <createTable tableName="users">
+            <column name="id" type="${uuid.type}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="registration_date" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="andrii.ryzhkov">
+        <createTable tableName="roles">
+            <column name="id" type="${uuid.type}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="andrii.ryzhkov">
+        <createTable tableName="users_roles">
+            <column name="user_id" type="${uuid.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="${uuid.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="users_roles" columnNames="user_id, role_id"/>
+        <addForeignKeyConstraint baseTableName="users_roles"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_users_roles_users"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="users_roles"
+                                 baseColumnNames="role_id"
+                                 constraintName="fk_users_roles_roles"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="roles"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="4" author="andrii.ryzhkov">
+        <createTable tableName="event_types">
+            <column name="id" type="${uuid.type}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="hourly_rate_coefficient" type="float">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="andrii.ryzhkov">
+        <createTable tableName="departments">
+            <column name="id" type="${uuid.type}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="andrii.ryzhkov">
+        <createTable tableName="employee_posts">
+            <column name="id" type="${uuid.type}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="andrii.ryzhkov">
+        <createTable tableName="employee_statuses">
+            <column name="id" type="${uuid.type}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8" author="andrii.ryzhkov">
+        <createTable tableName="employees">
+            <column name="id" type="${uuid.type}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hourly_rate" type="float">
+                <constraints nullable="false"/>
+            </column>
+            <column name="department_id" type="${uuid.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_id" type="${uuid.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_id" type="${uuid.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="${uuid.type}">
+                <constraints unique="true"/>
+            </column>
+            <column name="current_working_hours" type="float" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="employees"
+                                 baseColumnNames="department_id"
+                                 constraintName="fk_employees_departments"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="departments"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="employees"
+                                 baseColumnNames="post_id"
+                                 constraintName="fk_employees_employee_posts"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="employee_posts"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="employees"
+                                 baseColumnNames="status_id"
+                                 constraintName="fk_employees_employee_statuses"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="employee_statuses"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="employees"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_employees_users"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="9" author="andrii.ryzhkov">
+        <createTable tableName="payments">
+            <column name="id" type="${uuid.type}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="working_hours" type="float" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="salary" type="float" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="employee_id" type="${uuid.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="payments"
+                                 baseColumnNames="employee_id"
+                                 constraintName="fk_payments_employees"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="employees"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="10" author="andrii.ryzhkov">
+        <createTable tableName="events">
+            <column name="id" type="${uuid.type}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration" type="float" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_type_id" type="${uuid.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="events"
+                                 baseColumnNames="event_type_id"
+                                 constraintName="fk_events_event_types"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="event_types"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="11" author="andrii.ryzhkov">
+        <createTable tableName="events_employees">
+            <column name="event_id" type="${uuid.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="employee_id" type="${uuid.type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="events_employees" columnNames="event_id, employee_id"/>
+        <addForeignKeyConstraint baseTableName="events_employees"
+                                 baseColumnNames="event_id"
+                                 constraintName="fk_events_employees_events"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="events"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="events_employees"
+                                 baseColumnNames="employee_id"
+                                 constraintName="fk_events_employees_employees"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="employees"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
+
+

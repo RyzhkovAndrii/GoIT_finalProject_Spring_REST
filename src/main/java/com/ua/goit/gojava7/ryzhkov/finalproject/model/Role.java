@@ -1,6 +1,5 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,12 +21,10 @@ public class Role extends NamedEntity {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
-    @JsonIgnore
     public Set<User> getSetUsers() {
         return users;
     }
 
-    @JsonIgnore
     public List<User> getUsers() {
         return getSetUsers() != null ? new ArrayList<>(getSetUsers()) : null;
     }

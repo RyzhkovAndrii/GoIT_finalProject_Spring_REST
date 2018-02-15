@@ -1,17 +1,20 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Role;
+import com.ua.goit.gojava7.ryzhkov.finalproject.model.dto.RoleDto;
+import com.ua.goit.gojava7.ryzhkov.finalproject.model.dto.RoleSaveDto;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.RoleService;
 import io.swagger.annotations.ApiOperation;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/roles")
@@ -20,48 +23,72 @@ public class RoleController {
 
     private RoleService roleService;
 
+    private ModelMapper modelMapper;
+
     @Autowired
-    public RoleController(RoleService roleService) {
+    public RoleController(RoleService roleService, ModelMapper modelMapper) {
         this.roleService = roleService;
+        this.modelMapper = modelMapper;
     }
 
     @ApiOperation(value = "view list of roles", response = Collection.class)
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Collection<Role>> getList() {
-        return new ResponseEntity<>(roleService.findAll(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Collection<RoleDto> getList() {
+        return convertToDto(roleService.findAll());
     }
 
-    @ApiOperation(value = "search role with name", response = Role.class) // todo same ulr like list
+    @ApiOperation(value = "search role with name") // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Role> getByName(@RequestParam String name) {
-        return new ResponseEntity<>(roleService.findByName(name), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public RoleDto getByName(@RequestParam String name) {
+        return convertToDto(roleService.findByName(name));
     }
 
-    @ApiOperation(value = "search role with ID", response = Role.class)
+    @ApiOperation(value = "search role with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Role> get(@PathVariable UUID id) {
-        return new ResponseEntity<>(roleService.findById(id), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public RoleDto get(@PathVariable UUID id) {
+        return convertToDto(roleService.findById(id));
     }
 
-    @ApiOperation(value = "add role", response = Role.class)
+    @ApiOperation(value = "add role")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Role> save(@RequestBody Role role) {
-        return new ResponseEntity<>(roleService.save(role), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public RoleDto save(@RequestBody RoleSaveDto roleDto) {
+        return convertToDto(roleService.save(convertToEntity(roleDto)));
     }
 
     @ApiOperation(value = "update role")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Void> update(@PathVariable UUID id, @RequestBody Role role) {
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable UUID id, @RequestBody RoleSaveDto roleDto) {
+        Role role = convertToEntity(roleDto);
         role.setId(id);
-        roleService.save(role);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        roleService.update(role);
     }
 
     @ApiOperation(value = "delete role")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable UUID id) {
         roleService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private Role convertToEntity(RoleSaveDto dto) {
+        return modelMapper.map(dto, Role.class);
+    }
+
+    private RoleDto convertToDto(Role role) {
+        return modelMapper.map(role, RoleDto.class);
+    }
+
+    private Collection<RoleDto> convertToDto(Collection<Role> roles) {
+        return roles.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
 }

@@ -11,10 +11,7 @@ import java.util.UUID;
 @ApiModel
 @Getter
 @Setter
-public class UserDto {
-
-    @ApiModelProperty(position = 1)
-    private UUID id;
+public class UserDto extends BaseEntityDto {
 
     @ApiModelProperty(position = 2)
     private String username;

@@ -37,6 +37,11 @@ public class EmployeePostServiceImpl implements EmployeePostService {
     }
 
     @Override
+    public void update(EmployeePost employeePost) {
+        this.save(employeePost);
+    }
+
+    @Override
     public void delete(EmployeePost employeePost) {
         employeePostRepository.delete(employeePost);
     }

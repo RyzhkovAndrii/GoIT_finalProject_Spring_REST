@@ -37,6 +37,11 @@ public class EmployeeStatusServiceImpl implements EmployeeStatusService {
     }
 
     @Override
+    public void update(EmployeeStatus employeeStatus) {
+        this.save(employeeStatus);
+    }
+
+    @Override
     public void delete(EmployeeStatus employeeStatus) {
         employeeStatusRepository.delete(employeeStatus);
     }

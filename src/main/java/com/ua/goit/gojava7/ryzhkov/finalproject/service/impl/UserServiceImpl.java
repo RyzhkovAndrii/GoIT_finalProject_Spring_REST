@@ -42,6 +42,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void update(User user) {
+        User oldUser = userRepository.findOne(user.getId());
+        user.setRegistrationDate(oldUser.getRegistrationDate());
+        userRepository.save(user);
+    }
+
+    @Override
     public void delete(User user) {
         userRepository.delete(user);
     }

@@ -37,6 +37,11 @@ public class EventTypeServiceImpl implements EventTypeService {
     }
 
     @Override
+    public void update(EventType eventType) {
+        this.save(eventType);
+    }
+
+    @Override
     public void delete(EventType eventType) {
         eventTypeRepository.delete(eventType);
     }

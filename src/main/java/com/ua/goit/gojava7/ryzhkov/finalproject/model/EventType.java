@@ -1,6 +1,5 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -24,7 +23,6 @@ public class EventType extends NamedEntity {
     private double hourlyRateCoefficient;
 
     @OneToMany(mappedBy = "type")
-    @JsonIgnore
     private Set<Event> events;
 
 }

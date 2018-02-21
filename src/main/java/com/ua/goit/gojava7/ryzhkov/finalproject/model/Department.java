@@ -1,6 +1,5 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -20,7 +19,6 @@ import java.util.Set;
 public class Department extends NamedEntity {
 
     @OneToMany(mappedBy = "department")
-    @JsonIgnore
     private Set<Employee> employees;
 
 }

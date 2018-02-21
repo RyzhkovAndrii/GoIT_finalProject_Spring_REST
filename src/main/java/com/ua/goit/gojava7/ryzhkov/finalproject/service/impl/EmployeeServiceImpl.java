@@ -38,6 +38,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void update(Employee employee) {
+        Employee oldEmployee = employeeRepository.findOne(employee.getId());
+        employee.setCurrentWorkingHours(oldEmployee.getCurrentWorkingHours());
         this.save(employee);
     }
 

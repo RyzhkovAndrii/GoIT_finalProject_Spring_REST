@@ -2,7 +2,9 @@ package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Employee;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EmployeeService;
+import com.ua.goit.gojava7.ryzhkov.finalproject.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,9 +22,14 @@ public class EmployeeController {
 
     private EmployeeService employeeService;
 
+    private UserService userService;
+
+    private ModelMapper modelMapper;
+
     @Autowired
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, ModelMapper modelMapper) {
         this.employeeService = employeeService;
+        this.modelMapper = modelMapper;
     }
 
     @ApiOperation(value = "view list of employees", response = Collection.class)
@@ -59,5 +66,21 @@ public class EmployeeController {
         employeeService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /*private Employee convertToEntity(EmployeeSaveDto dto) {
+        Employee employee = modelMapper.map(dto, Employee.class);
+        if (dto.getUserId() != null) {
+            employee.setUser(userService.findById(dto.getUserId()));
+        }
+        return employee;
+    }
+
+    private EmployeeDto convertToDto(Employee employee) {
+        return modelMapper.map(employee, EmployeeDto.class);
+    }
+
+    private Collection<EmployeeDto> convertToDto(Collection<Employee> employees) {
+        return employees.stream().map(this::convertToDto).collect(Collectors.toList());
+    }*/
 
 }

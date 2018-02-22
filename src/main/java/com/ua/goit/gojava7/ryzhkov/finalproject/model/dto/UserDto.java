@@ -13,16 +13,16 @@ import java.util.UUID;
 @Setter
 public class UserDto extends BaseEntityDto {
 
-    @ApiModelProperty(position = 2)
+    @ApiModelProperty(position = 1)
     private String username;
 
-    @ApiModelProperty(position = 3)
+    @ApiModelProperty(position = 2)
     private String password;
 
-    @ApiModelProperty(position = 4)
+    @ApiModelProperty(position = 3)
     private Date registrationDate;
 
-    @ApiModelProperty(position = 5)
+    @ApiModelProperty(position = 4)
     private UUID employeeId;
 
 }

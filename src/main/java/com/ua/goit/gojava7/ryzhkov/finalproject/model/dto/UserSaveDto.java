@@ -7,9 +7,9 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+@ApiModel
 @Getter
 @Setter
-@ApiModel
 public class UserSaveDto {
 
     @ApiModelProperty(required = true, position = 1)

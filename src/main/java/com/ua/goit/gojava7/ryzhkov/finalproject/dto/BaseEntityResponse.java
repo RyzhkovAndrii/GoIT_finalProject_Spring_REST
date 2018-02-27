@@ -1,4 +1,4 @@
-package com.ua.goit.gojava7.ryzhkov.finalproject.model.dto;
+package com.ua.goit.gojava7.ryzhkov.finalproject.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public abstract class BaseEntityDto {
+public abstract class BaseEntityResponse {
 
     @ApiModelProperty(position = -2)
     private UUID id;

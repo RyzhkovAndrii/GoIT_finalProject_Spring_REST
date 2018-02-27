@@ -1,4 +1,4 @@
-package com.ua.goit.gojava7.ryzhkov.finalproject.model.dto;
+package com.ua.goit.gojava7.ryzhkov.finalproject.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import java.util.UUID;
 @ApiModel
 @Getter
 @Setter
-public class EventDto extends BaseEntityDto {
+public class EventResponse extends BaseEntityResponse {
 
     @ApiModelProperty(position = 1)
     private String description;

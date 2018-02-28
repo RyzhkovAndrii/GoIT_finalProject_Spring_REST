@@ -26,21 +26,21 @@ public class UserController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of users")
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Collection<UserResponse> getList() {
         return conversionService.convert(userService.findAll(), UserResponse.class);
     }
 
     @ApiOperation(value = "search user with ID")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserResponse get(@PathVariable UUID id) {
         return conversionService.convert(userService.findById(id), UserResponse.class);
     }
 
     @ApiOperation(value = "add user")
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse save(@RequestBody UserRequest userRequest) {
         User user = conversionService.convert(userRequest, User.class);
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "update user")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody UserRequest userRequest) {
         User user = conversionService.convert(userRequest, User.class);
@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "delete user")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         userService.delete(id);

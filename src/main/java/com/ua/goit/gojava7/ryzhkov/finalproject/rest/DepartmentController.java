@@ -26,28 +26,28 @@ public class DepartmentController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of departments")
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Collection<DepartmentResponse> getList() {
         return conversionService.convert(departmentService.findAll(), DepartmentResponse.class);
     }
 
     @ApiOperation(value = "search department with name") // todo same ulr like list
-    @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(params = "name", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public DepartmentResponse getByName(@RequestParam String name) {
         return conversionService.convert(departmentService.findByName(name), DepartmentResponse.class);
     }
 
     @ApiOperation(value = "search department with ID")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public DepartmentResponse get(@PathVariable UUID id) {
         return conversionService.convert(departmentService.findById(id), DepartmentResponse.class);
     }
 
     @ApiOperation(value = "add department")
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public DepartmentResponse save(@RequestBody DepartmentRequest departmentRequest) {
         Department department = conversionService.convert(departmentRequest, Department.class);
@@ -55,7 +55,7 @@ public class DepartmentController {
     }
 
     @ApiOperation(value = "update department")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody DepartmentRequest departmentRequest) {
         Department department = conversionService.convert(departmentRequest, Department.class);
@@ -64,7 +64,7 @@ public class DepartmentController {
     }
 
     @ApiOperation(value = "delete department")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         departmentService.delete(id);

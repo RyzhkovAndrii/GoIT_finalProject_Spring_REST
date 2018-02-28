@@ -31,14 +31,14 @@ public class EmployeePaymentsController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of user's payments")
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Collection<PaymentResponse> getEmployeePayments(@PathVariable("employee") UUID id) {
         return conversionService.convert(employeeService.findById(id).getPayments(), PaymentResponse.class);
     }
 
     @ApiOperation(value = "view list of user's payments for period")
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, params = {"start-date", "finish-date"})
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, params = {"start-date", "finish-date"})
     @ResponseStatus(HttpStatus.OK)
     public Collection<PaymentResponse> getEmployeePaymentsByPeriod(
             @PathVariable("employee") UUID id,

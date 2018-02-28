@@ -26,7 +26,7 @@ public class EmployeeController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of employees")
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Collection<EmployeeResponse> getList() {
         return conversionService.convert(employeeService.findAll(), EmployeeResponse.class);
@@ -35,14 +35,14 @@ public class EmployeeController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE USER')")
 //            "or #id == @securityServiceImpl.findLoggedInEmployeeId()") // todo not working
     @ApiOperation(value = "search employee with ID")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public EmployeeResponse get(@PathVariable UUID id) {
         return conversionService.convert(employeeService.findById(id), EmployeeResponse.class);
     }
 
     @ApiOperation(value = "add employee")
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeResponse save(@RequestBody EmployeeRequest employeeRequest) {
         Employee employee = conversionService.convert(employeeRequest, Employee.class);
@@ -50,7 +50,7 @@ public class EmployeeController {
     }
 
     @ApiOperation(value = "update employee")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EmployeeRequest employeeRequest) {
         Employee employee = conversionService.convert(employeeRequest, Employee.class);
@@ -59,7 +59,7 @@ public class EmployeeController {
     }
 
     @ApiOperation(value = "delete employee")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         employeeService.delete(id);

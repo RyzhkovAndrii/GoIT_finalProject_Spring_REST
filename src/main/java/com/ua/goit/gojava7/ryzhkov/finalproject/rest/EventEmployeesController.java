@@ -24,21 +24,21 @@ public class EventEmployeesController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of event's employees")
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Collection<EmployeeResponse> getEventEmployees(@PathVariable("event") UUID id) {
         return conversionService.convert(eventService.findById(id).getEmployees(), EmployeeResponse.class);
     }
 
     @ApiOperation(value = "add employee to event")
-    @RequestMapping(value = "/{employee}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/{employee}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void addEventEmployee(@PathVariable("event") UUID eventId, @PathVariable("employee") UUID employeeId) {
         eventService.addEmployeeToEvent(eventId, employeeId);
     }
 
     @ApiOperation(value = "delete employee from event")
-    @RequestMapping(value = "/{employee}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "/{employee}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteEventEmployee(@PathVariable("event") UUID eventId, @PathVariable("employee") UUID employeeId) {
         eventService.deleteEmployeeFromEvent(eventId, employeeId);

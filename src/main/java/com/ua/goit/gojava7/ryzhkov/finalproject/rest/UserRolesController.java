@@ -24,21 +24,21 @@ public class UserRolesController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of user's roles")
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Collection<RoleResponse> getUserRoles(@PathVariable("user") UUID id) {
         return conversionService.convert(userService.findById(id).getRoles(), RoleResponse.class);
     }
 
     @ApiOperation(value = "add role to user")
-    @RequestMapping(value = "/{role}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping(value = "/{role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void addUserRole(@PathVariable("user") UUID userId, @PathVariable("role") UUID roleId) {
         userService.addRoleToUser(userId, roleId);
     }
 
     @ApiOperation(value = "delete role from user")
-    @RequestMapping(value = "/{role}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping(value = "/{role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteUserRole(@PathVariable("user") UUID userId, @PathVariable("role") UUID roleId) {
         userService.deleteRoleFromUser(userId, roleId);

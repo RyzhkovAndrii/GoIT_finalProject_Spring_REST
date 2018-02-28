@@ -33,7 +33,6 @@ public class EmployeePostController {
     @ApiOperation(value = "view list of employee posts")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Collection<EmployeePostResponse> getList() {
         return conversionService.convert(employeePostService.findAll(), EmployeePostResponse.class);
     }
@@ -41,7 +40,6 @@ public class EmployeePostController {
     @ApiOperation(value = "search employee post with name") // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public EmployeePostResponse getByName(@RequestParam String name) {
         return conversionService.convert(employeePostService.findByName(name), EmployeePostResponse.class);
     }
@@ -49,7 +47,6 @@ public class EmployeePostController {
     @ApiOperation(value = "search employee post with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public EmployeePostResponse get(@PathVariable UUID id) {
         return conversionService.convert(employeePostService.findById(id), EmployeePostResponse.class);
     }
@@ -57,7 +54,6 @@ public class EmployeePostController {
     @ApiOperation(value = "add employee post")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public EmployeePostResponse save(@RequestBody EmployeePostRequest employeePostRequest) {
         EmployeePost employeePost = conversionService.convert(employeePostRequest, EmployeePost.class);
         return conversionService.convert(employeePostService.save(employeePost), EmployeePostResponse.class);

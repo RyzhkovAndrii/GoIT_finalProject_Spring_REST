@@ -33,7 +33,6 @@ public class EventTypeController {
     @ApiOperation(value = "view list of event types")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Collection<EventTypeResponse> getList() {
         return conversionService.convert(eventTypeService.findAll(), EventTypeResponse.class);
     }
@@ -41,7 +40,6 @@ public class EventTypeController {
     @ApiOperation(value = "search event type with name") // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public EventTypeResponse getByName(@RequestParam String name) {
         return conversionService.convert(eventTypeService.findByName(name), EventTypeResponse.class);
     }
@@ -49,7 +47,6 @@ public class EventTypeController {
     @ApiOperation(value = "search event type with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public EventTypeResponse get(@PathVariable UUID id) {
         return conversionService.convert(eventTypeService.findById(id), EventTypeResponse.class);
     }
@@ -57,7 +54,6 @@ public class EventTypeController {
     @ApiOperation(value = "add event type")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public EventTypeResponse save(@RequestBody EventTypeRequest eventTypeRequest) {
         EventType eventType = conversionService.convert(eventTypeRequest, EventType.class);
         return conversionService.convert(eventTypeService.save(eventType), EventTypeResponse.class);

@@ -33,7 +33,6 @@ public class RoleController {
     @ApiOperation(value = "view list of roles")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Collection<RoleResponse> getList() {
         return conversionService.convert(roleService.findAll(), RoleResponse.class);
     }
@@ -41,7 +40,6 @@ public class RoleController {
     @ApiOperation(value = "search role with name") // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public RoleResponse getByName(@RequestParam String name) {
         return conversionService.convert(roleService.findByName(name), RoleResponse.class);
     }
@@ -49,7 +47,6 @@ public class RoleController {
     @ApiOperation(value = "search role with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public RoleResponse get(@PathVariable UUID id) {
         return conversionService.convert(roleService.findById(id), RoleResponse.class);
     }
@@ -57,7 +54,6 @@ public class RoleController {
     @ApiOperation(value = "add role")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public RoleResponse save(@RequestBody RoleRequest roleRequest) {
         Role role = conversionService.convert(roleRequest, Role.class);
         return conversionService.convert(roleService.save(role), RoleResponse.class);

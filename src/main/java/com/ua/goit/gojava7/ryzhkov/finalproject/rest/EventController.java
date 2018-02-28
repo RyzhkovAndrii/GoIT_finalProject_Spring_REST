@@ -33,7 +33,6 @@ public class EventController {
     @ApiOperation(value = "view list of events")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Collection<EventResponse> getList() {
         return conversionService.convert(eventService.findAll(), EventResponse.class);
     }
@@ -41,7 +40,6 @@ public class EventController {
     @ApiOperation(value = "search event with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public EventResponse get(@PathVariable UUID id) {
         return conversionService.convert(eventService.findById(id), EventResponse.class);
     }
@@ -49,7 +47,6 @@ public class EventController {
     @ApiOperation(value = "add event")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public EventResponse save(@RequestBody EventRequest eventRequest) {
         Event event = conversionService.convert(eventRequest, Event.class);
         return conversionService.convert(eventService.save(event), EventResponse.class);

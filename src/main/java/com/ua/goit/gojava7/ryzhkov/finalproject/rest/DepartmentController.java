@@ -33,7 +33,6 @@ public class DepartmentController {
     @ApiOperation(value = "view list of departments")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Collection<DepartmentResponse> getList() {
         return conversionService.convert(departmentService.findAll(), DepartmentResponse.class);
     }
@@ -41,7 +40,6 @@ public class DepartmentController {
     @ApiOperation(value = "search department with name") // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public DepartmentResponse getByName(@RequestParam String name) {
         return conversionService.convert(departmentService.findByName(name), DepartmentResponse.class);
     }
@@ -49,7 +47,6 @@ public class DepartmentController {
     @ApiOperation(value = "search department with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public DepartmentResponse get(@PathVariable UUID id) {
         return conversionService.convert(departmentService.findById(id), DepartmentResponse.class);
     }
@@ -57,7 +54,6 @@ public class DepartmentController {
     @ApiOperation(value = "add department")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public DepartmentResponse save(@RequestBody DepartmentRequest departmentRequest) {
         Department department = conversionService.convert(departmentRequest, Department.class);
         return conversionService.convert(departmentService.save(department), DepartmentResponse.class);

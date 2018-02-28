@@ -33,7 +33,6 @@ public class UserController {
     @ApiOperation(value = "view list of users")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Collection<UserResponse> getList() {
         return conversionService.convert(userService.findAll(), UserResponse.class);
     }
@@ -41,7 +40,6 @@ public class UserController {
     @ApiOperation(value = "search user with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public UserResponse get(@PathVariable UUID id) {
         return conversionService.convert(userService.findById(id), UserResponse.class);
     }
@@ -49,7 +47,6 @@ public class UserController {
     @ApiOperation(value = "add user")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public UserResponse save(@RequestBody UserRequest userRequest) {
         User user = conversionService.convert(userRequest, User.class);
         return conversionService.convert(userService.save(user), UserResponse.class);

@@ -1,12 +1,12 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
 import com.ua.goit.gojava7.ryzhkov.finalproject.converter.ModelConversionService;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.EventType;
-import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EventTypeResponse;
 import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EventTypeRequest;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EventTypeResponse;
+import com.ua.goit.gojava7.ryzhkov.finalproject.model.EventType;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EventTypeService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,17 +18,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("event-types")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+@RequiredArgsConstructor
 public class EventTypeController {
 
-    private EventTypeService eventTypeService;
+    private final EventTypeService eventTypeService;
     
-    private ModelConversionService conversionService;
-
-    @Autowired
-    public EventTypeController(EventTypeService eventTypeService, ModelConversionService conversionService) {
-        this.eventTypeService = eventTypeService;
-        this.conversionService = conversionService;
-    }
+    private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of event types")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

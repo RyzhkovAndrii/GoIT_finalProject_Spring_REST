@@ -7,7 +7,7 @@ import com.ua.goit.gojava7.ryzhkov.finalproject.model.Payment;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EmployeeService;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.PaymentService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,20 +21,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/employees/{employee}/payments")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_USER')") // todo only one user
+@RequiredArgsConstructor
 public class EmployeePaymentsController {
 
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
 
     private final ModelConversionService conversionService;
-
-    @Autowired
-    public EmployeePaymentsController(EmployeeService employeeService, PaymentService paymentService, ModelConversionService conversionService) {
-        this.employeeService = employeeService;
-        this.paymentService = paymentService;
-        this.conversionService = conversionService;
-    }
 
     @ApiOperation(value = "view list of user's payments")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

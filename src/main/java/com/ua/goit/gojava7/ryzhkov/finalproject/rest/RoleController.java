@@ -1,12 +1,12 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
 import com.ua.goit.gojava7.ryzhkov.finalproject.converter.ModelConversionService;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.Role;
-import com.ua.goit.gojava7.ryzhkov.finalproject.dto.RoleResponse;
 import com.ua.goit.gojava7.ryzhkov.finalproject.dto.RoleRequest;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.RoleResponse;
+import com.ua.goit.gojava7.ryzhkov.finalproject.model.Role;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.RoleService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,17 +18,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/roles")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
+@RequiredArgsConstructor
 public class RoleController {
 
-    private RoleService roleService;
+    private final RoleService roleService;
 
-    private ModelConversionService conversionService;
-
-    @Autowired
-    public RoleController(RoleService roleService, ModelConversionService conversionService) {
-        this.roleService = roleService;
-        this.conversionService = conversionService;
-    }
+    private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of roles")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

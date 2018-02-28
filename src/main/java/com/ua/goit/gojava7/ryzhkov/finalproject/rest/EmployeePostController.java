@@ -6,7 +6,7 @@ import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EmployeePostResponse;
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.EmployeePost;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EmployeePostService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,17 +18,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/employee-posts")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+@RequiredArgsConstructor
 public class EmployeePostController {
 
-    private EmployeePostService employeePostService;
+    private final EmployeePostService employeePostService;
 
-    private ModelConversionService conversionService;
-
-    @Autowired
-    public EmployeePostController(EmployeePostService employeePostService, ModelConversionService conversionService) {
-        this.employeePostService = employeePostService;
-        this.conversionService = conversionService;
-    }
+    private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of employee posts")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

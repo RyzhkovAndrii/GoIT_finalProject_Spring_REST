@@ -1,12 +1,12 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
 import com.ua.goit.gojava7.ryzhkov.finalproject.converter.ModelConversionService;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.EmployeeStatus;
-import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EmployeeStatusResponse;
 import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EmployeeStatusRequest;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EmployeeStatusResponse;
+import com.ua.goit.gojava7.ryzhkov.finalproject.model.EmployeeStatus;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EmployeeStatusService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,17 +18,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/employee-statuses")
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
+@RequiredArgsConstructor
 public class EmployeeStatusController {
 
-    private EmployeeStatusService employeeStatusService;
+    private final EmployeeStatusService employeeStatusService;
 
-    private ModelConversionService conversionService;
-
-    @Autowired
-    public EmployeeStatusController(EmployeeStatusService employeeStatusService, ModelConversionService conversionService) {
-        this.employeeStatusService = employeeStatusService;
-        this.conversionService = conversionService;
-    }
+    private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of employee statuses")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

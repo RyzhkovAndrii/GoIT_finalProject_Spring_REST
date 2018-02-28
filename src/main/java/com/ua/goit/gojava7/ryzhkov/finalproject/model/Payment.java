@@ -1,6 +1,5 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -29,7 +28,6 @@ public class Payment extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
-    @JsonIgnore
     private Employee employee;
 
 }

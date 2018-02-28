@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ExtendedConversionServiceImpl implements ExtendedConversionService {
+public class ModelConversionServiceImpl implements ModelConversionService {
 
     private final ConversionService conversionService;
 

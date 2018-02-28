@@ -2,7 +2,7 @@ package com.ua.goit.gojava7.ryzhkov.finalproject.converter;
 
 import java.util.Collection;
 
-public interface ExtendedConversionService {
+public interface ModelConversionService {
 
     <T> T convert(Object obj, Class<T> type);
 

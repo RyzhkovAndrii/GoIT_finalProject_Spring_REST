@@ -1,14 +1,16 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
+import com.ua.goit.gojava7.ryzhkov.finalproject.converter.ModelConversionService;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.PaymentResponse;
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Employee;
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Payment;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EmployeeService;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.PaymentService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,26 +27,32 @@ public class EmployeePaymentsController {
 
     private PaymentService paymentService;
 
+    private final ModelConversionService conversionService;
+
     @Autowired
-    public EmployeePaymentsController(EmployeeService employeeService, PaymentService paymentService) {
+    public EmployeePaymentsController(EmployeeService employeeService, PaymentService paymentService, ModelConversionService conversionService) {
         this.employeeService = employeeService;
         this.paymentService = paymentService;
+        this.conversionService = conversionService;
     }
 
+    @ApiOperation(value = "view list of user's payments")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Collection<Payment>> getEmployeePayments(@PathVariable("employee") UUID id) {
-        return new ResponseEntity<>(employeeService.findById(id).getPayments(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<PaymentResponse> getEmployeePayments(@PathVariable("employee") UUID id) {
+        return conversionService.convert(employeeService.findById(id).getPayments(), PaymentResponse.class);
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
-            params = {"start-date", "finish-date"})
-    public ResponseEntity<Collection<Payment>> getEmployeePaymentsByPeriod(
+    @ApiOperation(value = "view list of user's payments for period")
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, params = {"start-date", "finish-date"})
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<PaymentResponse> getEmployeePaymentsByPeriod(
             @PathVariable("employee") UUID id,
             @RequestParam("start-date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
             @RequestParam("finish-date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date finishDate) {
         Employee employee = employeeService.findById(id);
         Collection<Payment> employeePayments = paymentService.getByEmployeeAndPeriod(employee, startDate, finishDate);
-        return new ResponseEntity<>(employeePayments, HttpStatus.OK);
+        return conversionService.convert(employeePayments, PaymentResponse.class);
     }
 
 }

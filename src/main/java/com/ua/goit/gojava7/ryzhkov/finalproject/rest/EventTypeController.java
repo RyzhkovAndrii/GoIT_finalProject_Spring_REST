@@ -1,11 +1,11 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
+import com.ua.goit.gojava7.ryzhkov.finalproject.converter.ModelConversionService;
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.EventType;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.dto.EventTypeDto;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.dto.EventTypeSaveDto;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EventTypeResponse;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EventTypeRequest;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EventTypeService;
 import io.swagger.annotations.ApiOperation;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("event-types")
@@ -23,51 +22,52 @@ public class EventTypeController {
 
     private EventTypeService eventTypeService;
     
-    private ModelMapper modelMapper;
+    private ModelConversionService conversionService;
 
     @Autowired
-    public EventTypeController(EventTypeService eventTypeService, ModelMapper modelMapper) {
+    public EventTypeController(EventTypeService eventTypeService, ModelConversionService conversionService) {
         this.eventTypeService = eventTypeService;
-        this.modelMapper = modelMapper;
+        this.conversionService = conversionService;
     }
 
     @ApiOperation(value = "view list of event types")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Collection<EventTypeDto> getList() {
-        return convertToDto(eventTypeService.findAll());
+    public Collection<EventTypeResponse> getList() {
+        return conversionService.convert(eventTypeService.findAll(), EventTypeResponse.class);
     }
 
     @ApiOperation(value = "search event type with name") // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public EventTypeDto getByName(@RequestParam String name) {
-        return convertToDto(eventTypeService.findByName(name));
+    public EventTypeResponse getByName(@RequestParam String name) {
+        return conversionService.convert(eventTypeService.findByName(name), EventTypeResponse.class);
     }
 
     @ApiOperation(value = "search event type with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public EventTypeDto get(@PathVariable UUID id) {
-        return convertToDto(eventTypeService.findById(id));
+    public EventTypeResponse get(@PathVariable UUID id) {
+        return conversionService.convert(eventTypeService.findById(id), EventTypeResponse.class);
     }
 
     @ApiOperation(value = "add event type")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public EventTypeDto save(@RequestBody EventTypeSaveDto eventTypeDto) {
-        return convertToDto(eventTypeService.save(convertToEntity(eventTypeDto)));
+    public EventTypeResponse save(@RequestBody EventTypeRequest eventTypeRequest) {
+        EventType eventType = conversionService.convert(eventTypeRequest, EventType.class);
+        return conversionService.convert(eventTypeService.save(eventType), EventTypeResponse.class);
     }
 
     @ApiOperation(value = "update event type")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable UUID id, @RequestBody EventTypeSaveDto eventTypeDto) {
-        EventType eventType = convertToEntity(eventTypeDto);
+    public void update(@PathVariable UUID id, @RequestBody EventTypeRequest eventTypeRequest) {
+        EventType eventType = conversionService.convert(eventTypeRequest, EventType.class);
         eventType.setId(id);
         eventTypeService.update(eventType);
     }
@@ -77,18 +77,6 @@ public class EventTypeController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         eventTypeService.delete(id);
-    }
-
-    private EventType convertToEntity(EventTypeSaveDto dto) {
-        return modelMapper.map(dto, EventType.class);
-    }
-
-    private EventTypeDto convertToDto(EventType eventType) {
-        return modelMapper.map(eventType, EventTypeDto.class);
-    }
-
-    private Collection<EventTypeDto> convertToDto(Collection<EventType> eventTypes) {
-        return eventTypes.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
 }

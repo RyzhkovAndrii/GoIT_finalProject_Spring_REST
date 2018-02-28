@@ -1,11 +1,11 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
+import com.ua.goit.gojava7.ryzhkov.finalproject.converter.ModelConversionService;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EmployeePostRequest;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.EmployeePostResponse;
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.EmployeePost;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.dto.EmployeePostDto;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.dto.EmployeePostSaveDto;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.EmployeePostService;
 import io.swagger.annotations.ApiOperation;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employee-posts")
@@ -23,51 +22,52 @@ public class EmployeePostController {
 
     private EmployeePostService employeePostService;
 
-    private ModelMapper modelMapper;
+    private ModelConversionService conversionService;
 
     @Autowired
-    public EmployeePostController(EmployeePostService employeePostService, ModelMapper modelMapper) {
+    public EmployeePostController(EmployeePostService employeePostService, ModelConversionService conversionService) {
         this.employeePostService = employeePostService;
-        this.modelMapper = modelMapper;
+        this.conversionService = conversionService;
     }
 
     @ApiOperation(value = "view list of employee posts")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Collection<EmployeePostDto> getList() {
-        return convertToDto(employeePostService.findAll());
+    public Collection<EmployeePostResponse> getList() {
+        return conversionService.convert(employeePostService.findAll(), EmployeePostResponse.class);
     }
 
     @ApiOperation(value = "search employee post with name") // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public EmployeePostDto getByName(@RequestParam String name) {
-        return convertToDto(employeePostService.findByName(name));
+    public EmployeePostResponse getByName(@RequestParam String name) {
+        return conversionService.convert(employeePostService.findByName(name), EmployeePostResponse.class);
     }
 
     @ApiOperation(value = "search employee post with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public EmployeePostDto get(@PathVariable UUID id) {
-        return convertToDto(employeePostService.findById(id));
+    public EmployeePostResponse get(@PathVariable UUID id) {
+        return conversionService.convert(employeePostService.findById(id), EmployeePostResponse.class);
     }
 
     @ApiOperation(value = "add employee post")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public EmployeePostDto save(@RequestBody EmployeePostSaveDto employeePostDto) {
-        return convertToDto(employeePostService.save(convertToEntity(employeePostDto)));
+    public EmployeePostResponse save(@RequestBody EmployeePostRequest employeePostRequest) {
+        EmployeePost employeePost = conversionService.convert(employeePostRequest, EmployeePost.class);
+        return conversionService.convert(employeePostService.save(employeePost), EmployeePostResponse.class);
     }
 
     @ApiOperation(value = "update employee post")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable UUID id, @RequestBody EmployeePostSaveDto employeePostDto) {
-        EmployeePost employeePost = convertToEntity(employeePostDto);
+    public void update(@PathVariable UUID id, @RequestBody EmployeePostRequest employeePostRequest) {
+        EmployeePost employeePost = conversionService.convert(employeePostRequest, EmployeePost.class);
         employeePost.setId(id);
         employeePostService.update(employeePost);
     }
@@ -77,18 +77,6 @@ public class EmployeePostController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         employeePostService.delete(id);
-    }
-
-    private EmployeePost convertToEntity(EmployeePostSaveDto dto) {
-        return modelMapper.map(dto, EmployeePost.class);
-    }
-
-    private EmployeePostDto convertToDto(EmployeePost employeePost) {
-        return modelMapper.map(employeePost, EmployeePostDto.class);
-    }
-
-    private Collection<EmployeePostDto> convertToDto(Collection<EmployeePost> employeePosts) {
-        return employeePosts.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
 }

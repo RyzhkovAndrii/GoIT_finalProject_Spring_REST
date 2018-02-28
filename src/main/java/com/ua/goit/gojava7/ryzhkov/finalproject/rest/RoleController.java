@@ -1,11 +1,11 @@
 package com.ua.goit.gojava7.ryzhkov.finalproject.rest;
 
+import com.ua.goit.gojava7.ryzhkov.finalproject.converter.ModelConversionService;
 import com.ua.goit.gojava7.ryzhkov.finalproject.model.Role;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.dto.RoleDto;
-import com.ua.goit.gojava7.ryzhkov.finalproject.model.dto.RoleSaveDto;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.RoleResponse;
+import com.ua.goit.gojava7.ryzhkov.finalproject.dto.RoleRequest;
 import com.ua.goit.gojava7.ryzhkov.finalproject.service.RoleService;
 import io.swagger.annotations.ApiOperation;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/roles")
@@ -23,51 +22,52 @@ public class RoleController {
 
     private RoleService roleService;
 
-    private ModelMapper modelMapper;
+    private ModelConversionService conversionService;
 
     @Autowired
-    public RoleController(RoleService roleService, ModelMapper modelMapper) {
+    public RoleController(RoleService roleService, ModelConversionService conversionService) {
         this.roleService = roleService;
-        this.modelMapper = modelMapper;
+        this.conversionService = conversionService;
     }
 
-    @ApiOperation(value = "view list of roles", response = Collection.class)
+    @ApiOperation(value = "view list of roles")
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Collection<RoleDto> getList() {
-        return convertToDto(roleService.findAll());
+    public Collection<RoleResponse> getList() {
+        return conversionService.convert(roleService.findAll(), RoleResponse.class);
     }
 
     @ApiOperation(value = "search role with name") // todo same ulr like list
     @RequestMapping(params = "name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public RoleDto getByName(@RequestParam String name) {
-        return convertToDto(roleService.findByName(name));
+    public RoleResponse getByName(@RequestParam String name) {
+        return conversionService.convert(roleService.findByName(name), RoleResponse.class);
     }
 
     @ApiOperation(value = "search role with ID")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public RoleDto get(@PathVariable UUID id) {
-        return convertToDto(roleService.findById(id));
+    public RoleResponse get(@PathVariable UUID id) {
+        return conversionService.convert(roleService.findById(id), RoleResponse.class);
     }
 
     @ApiOperation(value = "add role")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public RoleDto save(@RequestBody RoleSaveDto roleDto) {
-        return convertToDto(roleService.save(convertToEntity(roleDto)));
+    public RoleResponse save(@RequestBody RoleRequest roleRequest) {
+        Role role = conversionService.convert(roleRequest, Role.class);
+        return conversionService.convert(roleService.save(role), RoleResponse.class);
     }
 
     @ApiOperation(value = "update role")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable UUID id, @RequestBody RoleSaveDto roleDto) {
-        Role role = convertToEntity(roleDto);
+    public void update(@PathVariable UUID id, @RequestBody RoleRequest roleRequest) {
+        Role role = conversionService.convert(roleRequest, Role.class);
         role.setId(id);
         roleService.update(role);
     }
@@ -77,18 +77,6 @@ public class RoleController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         roleService.delete(id);
-    }
-
-    private Role convertToEntity(RoleSaveDto dto) {
-        return modelMapper.map(dto, Role.class);
-    }
-
-    private RoleDto convertToDto(Role role) {
-        return modelMapper.map(role, RoleDto.class);
-    }
-
-    private Collection<RoleDto> convertToDto(Collection<Role> roles) {
-        return roles.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
 }

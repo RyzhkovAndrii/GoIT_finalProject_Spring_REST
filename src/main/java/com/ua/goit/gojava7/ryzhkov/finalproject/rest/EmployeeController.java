@@ -46,7 +46,7 @@ public class EmployeeController {
         return conversionService.convert(employeeService.findById(id), EmployeeResponse.class);
     }
 
-    @ApiOperation(value = "add employee", response = Employee.class)
+    @ApiOperation(value = "add employee")
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeResponse save(@RequestBody EmployeeRequest employeeRequest) {

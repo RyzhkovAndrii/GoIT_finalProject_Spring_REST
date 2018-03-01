@@ -30,14 +30,14 @@ public class EmployeePaymentsController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of user's payments")
+    @ApiOperation("view list of user's payments")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<PaymentResponse> getEmployeePayments(@PathVariable("employee") UUID id) {
         return conversionService.convert(employeeService.findById(id).getPayments(), PaymentResponse.class);
     }
 
-    @ApiOperation(value = "view list of user's payments for period")
+    @ApiOperation("view list of user's payments for period")
     @GetMapping(params = {"start-date", "finish-date"})
     @ResponseStatus(HttpStatus.OK)
     public Collection<PaymentResponse> getEmployeePaymentsByPeriod(

@@ -25,21 +25,21 @@ public class EventController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of events")
+    @ApiOperation("view list of events")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EventResponse> getList() {
         return conversionService.convert(eventService.findAll(), EventResponse.class);
     }
 
-    @ApiOperation(value = "search event with ID")
+    @ApiOperation("search event with ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventResponse get(@PathVariable UUID id) {
         return conversionService.convert(eventService.findById(id), EventResponse.class);
     }
 
-    @ApiOperation(value = "add event")
+    @ApiOperation("add event")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventResponse save(@RequestBody EventRequest eventRequest) {
@@ -47,7 +47,7 @@ public class EventController {
         return conversionService.convert(eventService.save(event), EventResponse.class);
     }
 
-    @ApiOperation(value = "update event")
+    @ApiOperation("update event")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EventRequest eventRequest) {
@@ -56,7 +56,7 @@ public class EventController {
         eventService.update(event);
     }
 
-    @ApiOperation(value = "delete event")
+    @ApiOperation("delete event")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {

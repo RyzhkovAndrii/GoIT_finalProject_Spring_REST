@@ -23,21 +23,21 @@ public class EventEmployeesController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of event's employees")
+    @ApiOperation("view list of event's employees")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EmployeeResponse> getEventEmployees(@PathVariable("event") UUID id) {
         return conversionService.convert(eventService.findById(id).getEmployees(), EmployeeResponse.class);
     }
 
-    @ApiOperation(value = "add employee to event")
+    @ApiOperation("add employee to event")
     @PutMapping("/{employee}")
     @ResponseStatus(HttpStatus.OK)
     public void addEventEmployee(@PathVariable("event") UUID eventId, @PathVariable("employee") UUID employeeId) {
         eventService.addEmployeeToEvent(eventId, employeeId);
     }
 
-    @ApiOperation(value = "delete employee from event")
+    @ApiOperation("delete employee from event")
     @DeleteMapping("/{employee}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteEventEmployee(@PathVariable("event") UUID eventId, @PathVariable("employee") UUID employeeId) {

@@ -25,28 +25,28 @@ public class EmployeePostController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of employee posts")
+    @ApiOperation("view list of employee posts")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EmployeePostResponse> getList() {
         return conversionService.convert(employeePostService.findAll(), EmployeePostResponse.class);
     }
 
-    @ApiOperation(value = "search employee post with name") // todo same ulr like list
+    @ApiOperation("search employee post with name") // todo same ulr like list
     @GetMapping(params = "name")
     @ResponseStatus(HttpStatus.OK)
     public EmployeePostResponse getByName(@RequestParam String name) {
         return conversionService.convert(employeePostService.findByName(name), EmployeePostResponse.class);
     }
 
-    @ApiOperation(value = "search employee post with ID")
+    @ApiOperation("search employee post with ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeePostResponse get(@PathVariable UUID id) {
         return conversionService.convert(employeePostService.findById(id), EmployeePostResponse.class);
     }
 
-    @ApiOperation(value = "add employee post")
+    @ApiOperation("add employee post")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeePostResponse save(@RequestBody EmployeePostRequest employeePostRequest) {
@@ -54,7 +54,7 @@ public class EmployeePostController {
         return conversionService.convert(employeePostService.save(employeePost), EmployeePostResponse.class);
     }
 
-    @ApiOperation(value = "update employee post")
+    @ApiOperation("update employee post")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EmployeePostRequest employeePostRequest) {
@@ -63,7 +63,7 @@ public class EmployeePostController {
         employeePostService.update(employeePost);
     }
 
-    @ApiOperation(value = "delete employee post")
+    @ApiOperation("delete employee post")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {

@@ -25,28 +25,28 @@ public class EmployeeStatusController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of employee statuses")
+    @ApiOperation("view list of employee statuses")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EmployeeStatusResponse> getList() {
         return conversionService.convert(employeeStatusService.findAll(), EmployeeStatusResponse.class);
     }
 
-    @ApiOperation(value = "search employee status with name") // todo same ulr like list
+    @ApiOperation("search employee status with name") // todo same ulr like list
     @GetMapping(params = "name")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeStatusResponse getByName(@RequestParam String name) {
         return conversionService.convert(employeeStatusService.findByName(name), EmployeeStatusResponse.class);
     }
 
-    @ApiOperation(value = "search employee status with ID")
+    @ApiOperation("search employee status with ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeStatusResponse get(@PathVariable UUID id) {
         return conversionService.convert(employeeStatusService.findById(id), EmployeeStatusResponse.class);
     }
 
-    @ApiOperation(value = "add employee status")
+    @ApiOperation("add employee status")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeStatusResponse save(@RequestBody EmployeeStatusRequest employeeStatusRequest) {
@@ -54,7 +54,7 @@ public class EmployeeStatusController {
         return conversionService.convert(employeeStatusService.save(employeeStatus), EmployeeStatusResponse.class);
     }
 
-    @ApiOperation(value = "update employee status")
+    @ApiOperation("update employee status")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EmployeeStatusRequest employeeStatusRequest) {

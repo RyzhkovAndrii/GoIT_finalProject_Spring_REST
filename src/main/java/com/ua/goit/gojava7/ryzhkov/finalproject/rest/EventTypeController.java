@@ -25,28 +25,28 @@ public class EventTypeController {
     
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of event types")
+    @ApiOperation("view list of event types")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EventTypeResponse> getList() {
         return conversionService.convert(eventTypeService.findAll(), EventTypeResponse.class);
     }
 
-    @ApiOperation(value = "search event type with name") // todo same ulr like list
+    @ApiOperation("search event type with name") // todo same ulr like list
     @GetMapping(params = "name")
     @ResponseStatus(HttpStatus.OK)
     public EventTypeResponse getByName(@RequestParam String name) {
         return conversionService.convert(eventTypeService.findByName(name), EventTypeResponse.class);
     }
 
-    @ApiOperation(value = "search event type with ID")
+    @ApiOperation("search event type with ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventTypeResponse get(@PathVariable UUID id) {
         return conversionService.convert(eventTypeService.findById(id), EventTypeResponse.class);
     }
 
-    @ApiOperation(value = "add event type")
+    @ApiOperation("add event type")
     @GetMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventTypeResponse save(@RequestBody EventTypeRequest eventTypeRequest) {
@@ -54,7 +54,7 @@ public class EventTypeController {
         return conversionService.convert(eventTypeService.save(eventType), EventTypeResponse.class);
     }
 
-    @ApiOperation(value = "update event type")
+    @ApiOperation("update event type")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EventTypeRequest eventTypeRequest) {
@@ -63,7 +63,7 @@ public class EventTypeController {
         eventTypeService.update(eventType);
     }
 
-    @ApiOperation(value = "delete eventType")
+    @ApiOperation("delete eventType")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {

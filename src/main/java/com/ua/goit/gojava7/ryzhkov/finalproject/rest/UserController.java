@@ -25,21 +25,21 @@ public class UserController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of users")
+    @ApiOperation("view list of users")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<UserResponse> getList() {
         return conversionService.convert(userService.findAll(), UserResponse.class);
     }
 
-    @ApiOperation(value = "search user with ID")
+    @ApiOperation("search user with ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse get(@PathVariable UUID id) {
         return conversionService.convert(userService.findById(id), UserResponse.class);
     }
 
-    @ApiOperation(value = "add user")
+    @ApiOperation("add user")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse save(@RequestBody UserRequest userRequest) {
@@ -47,7 +47,7 @@ public class UserController {
         return conversionService.convert(userService.save(user), UserResponse.class);
     }
 
-    @ApiOperation(value = "update user")
+    @ApiOperation("update user")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody UserRequest userRequest) {
@@ -56,7 +56,7 @@ public class UserController {
         userService.update(user);
     }
 
-    @ApiOperation(value = "delete user")
+    @ApiOperation("delete user")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {

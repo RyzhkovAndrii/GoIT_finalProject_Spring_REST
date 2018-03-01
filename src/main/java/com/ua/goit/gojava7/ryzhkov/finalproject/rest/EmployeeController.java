@@ -25,7 +25,7 @@ public class EmployeeController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of employees")
+    @ApiOperation("view list of employees")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EmployeeResponse> getList() {
@@ -34,14 +34,14 @@ public class EmployeeController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE USER')")
 //            "or #id == @securityServiceImpl.findLoggedInEmployeeId()") // todo not working
-    @ApiOperation(value = "search employee with ID")
+    @ApiOperation("search employee with ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeResponse get(@PathVariable UUID id) {
         return conversionService.convert(employeeService.findById(id), EmployeeResponse.class);
     }
 
-    @ApiOperation(value = "add employee")
+    @ApiOperation("add employee")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeResponse save(@RequestBody EmployeeRequest employeeRequest) {
@@ -49,7 +49,7 @@ public class EmployeeController {
         return conversionService.convert(employeeService.save(employee), EmployeeResponse.class);
     }
 
-    @ApiOperation(value = "update employee")
+    @ApiOperation("update employee")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EmployeeRequest employeeRequest) {
@@ -58,7 +58,7 @@ public class EmployeeController {
         employeeService.save(employee);
     }
 
-    @ApiOperation(value = "delete employee")
+    @ApiOperation("delete employee")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {

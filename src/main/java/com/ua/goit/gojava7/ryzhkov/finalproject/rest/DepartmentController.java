@@ -25,28 +25,28 @@ public class DepartmentController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of departments")
+    @ApiOperation("view list of departments")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<DepartmentResponse> getList() {
         return conversionService.convert(departmentService.findAll(), DepartmentResponse.class);
     }
 
-    @ApiOperation(value = "search department with name") // todo same ulr like list
+    @ApiOperation("search department with name") // todo same ulr like list
     @GetMapping(params = "name")
     @ResponseStatus(HttpStatus.OK)
     public DepartmentResponse getByName(@RequestParam String name) {
         return conversionService.convert(departmentService.findByName(name), DepartmentResponse.class);
     }
 
-    @ApiOperation(value = "search department with ID")
+    @ApiOperation("search department with ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public DepartmentResponse get(@PathVariable UUID id) {
         return conversionService.convert(departmentService.findById(id), DepartmentResponse.class);
     }
 
-    @ApiOperation(value = "add department")
+    @ApiOperation("add department")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public DepartmentResponse save(@RequestBody DepartmentRequest departmentRequest) {
@@ -54,7 +54,7 @@ public class DepartmentController {
         return conversionService.convert(departmentService.save(department), DepartmentResponse.class);
     }
 
-    @ApiOperation(value = "update department")
+    @ApiOperation("update department")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody DepartmentRequest departmentRequest) {
@@ -63,7 +63,7 @@ public class DepartmentController {
         departmentService.save(department);
     }
 
-    @ApiOperation(value = "delete department")
+    @ApiOperation("delete department")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {

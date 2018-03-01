@@ -23,21 +23,21 @@ public class UserRolesController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of user's roles")
+    @ApiOperation("view list of user's roles")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<RoleResponse> getUserRoles(@PathVariable("user") UUID id) {
         return conversionService.convert(userService.findById(id).getRoles(), RoleResponse.class);
     }
 
-    @ApiOperation(value = "add role to user")
+    @ApiOperation("add role to user")
     @PutMapping("/{role}")
     @ResponseStatus(HttpStatus.OK)
     public void addUserRole(@PathVariable("user") UUID userId, @PathVariable("role") UUID roleId) {
         userService.addRoleToUser(userId, roleId);
     }
 
-    @ApiOperation(value = "delete role from user")
+    @ApiOperation("delete role from user")
     @DeleteMapping("/{role}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUserRole(@PathVariable("user") UUID userId, @PathVariable("role") UUID roleId) {

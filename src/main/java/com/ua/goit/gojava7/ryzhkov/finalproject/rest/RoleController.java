@@ -25,28 +25,28 @@ public class RoleController {
 
     private final ModelConversionService conversionService;
 
-    @ApiOperation(value = "view list of roles")
+    @ApiOperation("view list of roles")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<RoleResponse> getList() {
         return conversionService.convert(roleService.findAll(), RoleResponse.class);
     }
 
-    @ApiOperation(value = "search role with name") // todo same ulr like list
+    @ApiOperation("search role with name") // todo same ulr like list
     @GetMapping(params = "name")
     @ResponseStatus(HttpStatus.OK)
     public RoleResponse getByName(@RequestParam String name) {
         return conversionService.convert(roleService.findByName(name), RoleResponse.class);
     }
 
-    @ApiOperation(value = "search role with ID")
+    @ApiOperation("search role with ID")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RoleResponse get(@PathVariable UUID id) {
         return conversionService.convert(roleService.findById(id), RoleResponse.class);
     }
 
-    @ApiOperation(value = "add role")
+    @ApiOperation("add role")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RoleResponse save(@RequestBody RoleRequest roleRequest) {
@@ -54,7 +54,7 @@ public class RoleController {
         return conversionService.convert(roleService.save(role), RoleResponse.class);
     }
 
-    @ApiOperation(value = "update role")
+    @ApiOperation("update role")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody RoleRequest roleRequest) {
@@ -63,7 +63,7 @@ public class RoleController {
         roleService.update(role);
     }
 
-    @ApiOperation(value = "delete role")
+    @ApiOperation("delete role")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {

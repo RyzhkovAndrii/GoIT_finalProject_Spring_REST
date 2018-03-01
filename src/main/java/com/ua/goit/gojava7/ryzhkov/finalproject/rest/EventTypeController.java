@@ -47,7 +47,7 @@ public class EventTypeController {
     }
 
     @ApiOperation("add event type")
-    @GetMapping
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventTypeResponse save(@RequestBody EventTypeRequest eventTypeRequest) {
         EventType eventType = conversionService.convert(eventTypeRequest, EventType.class);

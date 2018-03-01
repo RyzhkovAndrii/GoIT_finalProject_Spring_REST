@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/roles")
+@RequestMapping(value = "/roles", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequiredArgsConstructor
 public class RoleController {
@@ -26,28 +26,28 @@ public class RoleController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of roles")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<RoleResponse> getList() {
         return conversionService.convert(roleService.findAll(), RoleResponse.class);
     }
 
     @ApiOperation(value = "search role with name") // todo same ulr like list
-    @GetMapping(params = "name", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(params = "name")
     @ResponseStatus(HttpStatus.OK)
     public RoleResponse getByName(@RequestParam String name) {
         return conversionService.convert(roleService.findByName(name), RoleResponse.class);
     }
 
     @ApiOperation(value = "search role with ID")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RoleResponse get(@PathVariable UUID id) {
         return conversionService.convert(roleService.findById(id), RoleResponse.class);
     }
 
     @ApiOperation(value = "add role")
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RoleResponse save(@RequestBody RoleRequest roleRequest) {
         Role role = conversionService.convert(roleRequest, Role.class);
@@ -55,7 +55,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "update role")
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody RoleRequest roleRequest) {
         Role role = conversionService.convert(roleRequest, Role.class);
@@ -64,7 +64,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "delete role")
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         roleService.delete(id);

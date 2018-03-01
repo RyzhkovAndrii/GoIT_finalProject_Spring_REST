@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequiredArgsConstructor
 public class UserController {
@@ -26,21 +26,21 @@ public class UserController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of users")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<UserResponse> getList() {
         return conversionService.convert(userService.findAll(), UserResponse.class);
     }
 
     @ApiOperation(value = "search user with ID")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse get(@PathVariable UUID id) {
         return conversionService.convert(userService.findById(id), UserResponse.class);
     }
 
     @ApiOperation(value = "add user")
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse save(@RequestBody UserRequest userRequest) {
         User user = conversionService.convert(userRequest, User.class);
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "update user")
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody UserRequest userRequest) {
         User user = conversionService.convert(userRequest, User.class);
@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "delete user")
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         userService.delete(id);

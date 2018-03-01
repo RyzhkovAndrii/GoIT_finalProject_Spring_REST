@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/users/{user}/roles")
+@RequestMapping(value = "/users/{user}/roles", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequiredArgsConstructor
 public class UserRolesController {
@@ -24,21 +24,21 @@ public class UserRolesController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of user's roles")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<RoleResponse> getUserRoles(@PathVariable("user") UUID id) {
         return conversionService.convert(userService.findById(id).getRoles(), RoleResponse.class);
     }
 
     @ApiOperation(value = "add role to user")
-    @PutMapping(value = "/{role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping("/{role}")
     @ResponseStatus(HttpStatus.OK)
     public void addUserRole(@PathVariable("user") UUID userId, @PathVariable("role") UUID roleId) {
         userService.addRoleToUser(userId, roleId);
     }
 
     @ApiOperation(value = "delete role from user")
-    @DeleteMapping(value = "/{role}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping("/{role}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUserRole(@PathVariable("user") UUID userId, @PathVariable("role") UUID roleId) {
         userService.deleteRoleFromUser(userId, roleId);

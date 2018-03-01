@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/employee-posts")
+@RequestMapping(value = "/employee-posts", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
 @RequiredArgsConstructor
 public class EmployeePostController {
@@ -26,28 +26,28 @@ public class EmployeePostController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of employee posts")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EmployeePostResponse> getList() {
         return conversionService.convert(employeePostService.findAll(), EmployeePostResponse.class);
     }
 
     @ApiOperation(value = "search employee post with name") // todo same ulr like list
-    @GetMapping(params = "name", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(params = "name")
     @ResponseStatus(HttpStatus.OK)
     public EmployeePostResponse getByName(@RequestParam String name) {
         return conversionService.convert(employeePostService.findByName(name), EmployeePostResponse.class);
     }
 
     @ApiOperation(value = "search employee post with ID")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeePostResponse get(@PathVariable UUID id) {
         return conversionService.convert(employeePostService.findById(id), EmployeePostResponse.class);
     }
 
     @ApiOperation(value = "add employee post")
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeePostResponse save(@RequestBody EmployeePostRequest employeePostRequest) {
         EmployeePost employeePost = conversionService.convert(employeePostRequest, EmployeePost.class);
@@ -55,7 +55,7 @@ public class EmployeePostController {
     }
 
     @ApiOperation(value = "update employee post")
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EmployeePostRequest employeePostRequest) {
         EmployeePost employeePost = conversionService.convert(employeePostRequest, EmployeePost.class);
@@ -64,7 +64,7 @@ public class EmployeePostController {
     }
 
     @ApiOperation(value = "delete employee post")
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         employeePostService.delete(id);

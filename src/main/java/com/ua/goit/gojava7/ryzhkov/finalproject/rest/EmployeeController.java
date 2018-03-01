@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping(value = "/employees", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
 @RequiredArgsConstructor
 public class EmployeeController {
@@ -26,7 +26,7 @@ public class EmployeeController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of employees")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EmployeeResponse> getList() {
         return conversionService.convert(employeeService.findAll(), EmployeeResponse.class);
@@ -35,14 +35,14 @@ public class EmployeeController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE USER')")
 //            "or #id == @securityServiceImpl.findLoggedInEmployeeId()") // todo not working
     @ApiOperation(value = "search employee with ID")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EmployeeResponse get(@PathVariable UUID id) {
         return conversionService.convert(employeeService.findById(id), EmployeeResponse.class);
     }
 
     @ApiOperation(value = "add employee")
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeResponse save(@RequestBody EmployeeRequest employeeRequest) {
         Employee employee = conversionService.convert(employeeRequest, Employee.class);
@@ -50,7 +50,7 @@ public class EmployeeController {
     }
 
     @ApiOperation(value = "update employee")
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EmployeeRequest employeeRequest) {
         Employee employee = conversionService.convert(employeeRequest, Employee.class);
@@ -59,7 +59,7 @@ public class EmployeeController {
     }
 
     @ApiOperation(value = "delete employee")
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         employeeService.delete(id);

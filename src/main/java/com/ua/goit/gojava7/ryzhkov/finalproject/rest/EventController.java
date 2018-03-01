@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping(value = "/events", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
 @RequiredArgsConstructor
 public class EventController {
@@ -26,21 +26,21 @@ public class EventController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of events")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EventResponse> getList() {
         return conversionService.convert(eventService.findAll(), EventResponse.class);
     }
 
     @ApiOperation(value = "search event with ID")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventResponse get(@PathVariable UUID id) {
         return conversionService.convert(eventService.findById(id), EventResponse.class);
     }
 
     @ApiOperation(value = "add event")
-    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventResponse save(@RequestBody EventRequest eventRequest) {
         Event event = conversionService.convert(eventRequest, Event.class);
@@ -48,7 +48,7 @@ public class EventController {
     }
 
     @ApiOperation(value = "update event")
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EventRequest eventRequest) {
         Event event = conversionService.convert(eventRequest, Event.class);
@@ -57,7 +57,7 @@ public class EventController {
     }
 
     @ApiOperation(value = "delete event")
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         eventService.delete(id);

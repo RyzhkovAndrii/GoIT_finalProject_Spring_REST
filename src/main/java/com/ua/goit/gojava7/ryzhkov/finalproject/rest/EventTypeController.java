@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("event-types")
+@RequestMapping(value = "/event-types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
 @RequiredArgsConstructor
 public class EventTypeController {
@@ -26,28 +26,28 @@ public class EventTypeController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of event types")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EventTypeResponse> getList() {
         return conversionService.convert(eventTypeService.findAll(), EventTypeResponse.class);
     }
 
     @ApiOperation(value = "search event type with name") // todo same ulr like list
-    @GetMapping(params = "name", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(params = "name")
     @ResponseStatus(HttpStatus.OK)
     public EventTypeResponse getByName(@RequestParam String name) {
         return conversionService.convert(eventTypeService.findByName(name), EventTypeResponse.class);
     }
 
     @ApiOperation(value = "search event type with ID")
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventTypeResponse get(@PathVariable UUID id) {
         return conversionService.convert(eventTypeService.findById(id), EventTypeResponse.class);
     }
 
     @ApiOperation(value = "add event type")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventTypeResponse save(@RequestBody EventTypeRequest eventTypeRequest) {
         EventType eventType = conversionService.convert(eventTypeRequest, EventType.class);
@@ -55,7 +55,7 @@ public class EventTypeController {
     }
 
     @ApiOperation(value = "update event type")
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable UUID id, @RequestBody EventTypeRequest eventTypeRequest) {
         EventType eventType = conversionService.convert(eventTypeRequest, EventType.class);
@@ -64,7 +64,7 @@ public class EventTypeController {
     }
 
     @ApiOperation(value = "delete eventType")
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable UUID id) {
         eventTypeService.delete(id);

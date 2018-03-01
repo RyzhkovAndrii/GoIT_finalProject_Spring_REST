@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("events/{event}/employees")
+@RequestMapping(value = "/events/{event}/employees", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
 @RequiredArgsConstructor
 public class EventEmployeesController {
@@ -24,21 +24,21 @@ public class EventEmployeesController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of event's employees")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<EmployeeResponse> getEventEmployees(@PathVariable("event") UUID id) {
         return conversionService.convert(eventService.findById(id).getEmployees(), EmployeeResponse.class);
     }
 
     @ApiOperation(value = "add employee to event")
-    @PutMapping(value = "/{employee}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PutMapping("/{employee}")
     @ResponseStatus(HttpStatus.OK)
     public void addEventEmployee(@PathVariable("event") UUID eventId, @PathVariable("employee") UUID employeeId) {
         eventService.addEmployeeToEvent(eventId, employeeId);
     }
 
     @ApiOperation(value = "delete employee from event")
-    @DeleteMapping(value = "/{employee}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @DeleteMapping("/{employee}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteEventEmployee(@PathVariable("event") UUID eventId, @PathVariable("employee") UUID employeeId) {
         eventService.deleteEmployeeFromEvent(eventId, employeeId);

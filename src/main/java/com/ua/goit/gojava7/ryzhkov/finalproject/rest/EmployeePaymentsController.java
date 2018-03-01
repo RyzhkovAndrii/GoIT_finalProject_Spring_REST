@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/employees/{employee}/payments")
+@RequestMapping(value = "/employees/{employee}/payments", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_USER')") // todo only one user
 @RequiredArgsConstructor
 public class EmployeePaymentsController {
@@ -31,14 +31,14 @@ public class EmployeePaymentsController {
     private final ModelConversionService conversionService;
 
     @ApiOperation(value = "view list of user's payments")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<PaymentResponse> getEmployeePayments(@PathVariable("employee") UUID id) {
         return conversionService.convert(employeeService.findById(id).getPayments(), PaymentResponse.class);
     }
 
     @ApiOperation(value = "view list of user's payments for period")
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, params = {"start-date", "finish-date"})
+    @GetMapping(params = {"start-date", "finish-date"})
     @ResponseStatus(HttpStatus.OK)
     public Collection<PaymentResponse> getEmployeePaymentsByPeriod(
             @PathVariable("employee") UUID id,
